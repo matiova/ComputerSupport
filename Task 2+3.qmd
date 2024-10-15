@@ -1,0 +1,232 @@
+---
+title: "Computer Support Practical Tasks"
+date: "10/15/2024"
+author: "Žofia Matiová"
+format:
+  html:
+    embed-resources: true
+editor: source
+---
+
+## Introduction
+
+For performing practical tasks **R** and **R Studio** have to be installed.
+
+Links for downloading programs: 
+
+1. R: <https://cran.r-project.org/>
+
+2. R Studio: <https://posit.co/download/rstudio-desktop/>
+
+The results of laboratory work must be placed in your repository on Github in the files `TaskX.qmd` (or `LabX.Rmd` if you prefer to use R markdown) and generated from it `TaskX.html`, where X is the number of the laboratory in the form: **question**, **code**, **result** (if necessary). So, the file structure could looks like:
+
+```
+--ComputerSupportSTU
+  |--Task1.qmd
+  |--Task1.html
+  |--Task2.qmd
+  |--Task2.html
+```
+Use a template for `qmd` document (file `template.qmd`) to generate correct html file
+
+Example of output:
+
+1.  Print rownames of dataset `mtcars`.
+
+```{r}
+row.names(mtcars)
+```
+
+## Task 0
+
+1.  Create Github accout
+2.  Create new repository "ComputerSupportSTU"
+3.  In readme.md file add title a short repository description
+
+## Task 1. Data Types
+
+1. Create variables with all atomic types. Atomic types: `character`, `numeric`, `integer`, `complex`, `logical`.
+
+2. Create the next vectors:
+  * sequence from 5 to 75;
+  * numbers: 3.14, 2.71, 0, 13;
+  * with 100 `TRUE` values.
+
+3. Create the next matrix:
+
+|  |   |  |
+|:---:|:-----:|:---:|
+| 12  | 34    | 87  |
+| -12 | -12.1 | 0   |
+| 3.6 | 0.5   | 1.3 |
+
+4. Create a `list` with all atomic types.
+
+5. Create a `factor` with 3 levels: `infant`, `child`, `adult`.
+
+6. Create a `data frame`
+
+7. Change column names of the `data frame`.
+
+
+## Task 2. Subsetting data. Working with NA
+
+1. Create the next random vector:
+
+```{r message=FALSE}
+v <- rnorm(50)# Vytvorenie random vektora
+
+# a) 10th item
+v[10]
+
+# b) items from 10th to 20th (including 20th)
+v[10:20]
+
+# c) 10 items starting from 5th
+v[5:(5+9)]  # v[5:14]
+
+# d) all items bigger than 0
+v[v > 0]
+
+# e) last 5 items
+v[(length(v)-4):length(v)]
+
+```
+
+For the vector print:
+
+- 10th item,
+- items from 10th to 20th (including 20th item),
+- 10 items starting from 5th,
+- all items bigger than 0,
+- last 5 items.
+
+2. Create the next data frame:
+
+```{r message=FALSE}
+df <- 
+  data.frame(a = rnorm(50), b = 1:50, 
+             cc = sample(letters, 50, replace = TRUE))
+
+# a) last 10 rows
+tail(df, 10)
+
+# b) 15th item of column `cc`
+df$cc[15]
+
+# c) subset columns `a` and `b` and rows from 10th to 20th
+df[10:20, c("a", "b")]
+
+# d) new vector from column `b`
+new_vector_b <- df$b
+
+```
+
+For the data frame find and print:
+
+- the last 10 rows,
+- 15th item of columns `cc`,
+- subset columns `a` and `b` and rows from 10th to 20th (including 20th),
+- a new vector from column `b`.
+
+3. Create the next random vector:
+
+```{r}
+v_na <- rnorm(30)
+num_na <- sample(10, 1)
+v_na[sample(30, num_na)] <- NA
+# a) print all not NA items
+v_na[!is.na(v_na)]
+
+# b) find how many NA values the vector has
+sum(is.na(v_na))
+
+# c) find `min`, `max` and `mean` for the vector
+min(v_na, na.rm = TRUE)
+max(v_na, na.rm = TRUE)
+mean(v_na, na.rm = TRUE)
+```
+
+For this vector:
+
+- print all not NA items,
+- find how many NA values the vector has,
+- find `min` `max` and `mean` for the vector.
+
+## Task 3. Exploring a dataset
+
+For this task you have to use dataset from file `airquality.csv`. The description of the data you can find by the [link](https://www.rdocumentation.org/packages/datasets/versions/3.6.2/topics/airquality).
+
+Example, how to work with the dataset. For instanse, we want to find month (column `Month`) with highest mean temperature (`Temp`)
+
+```{r message=FALSE}
+library(dplyr)
+airquality |> 
+  group_by(Month) |> 
+  summarise(mean_temp = mean(Temp)) |> 
+  filter(mean_temp == max(mean_temp))
+```
+1. What are the column names of the data frame?
+
+```{r}
+colnames(airquality)
+```
+
+2. What are the row names of the data frame?
+
+```{r}
+rownames(airquality)
+```
+
+3. Extract the first 6 rows of the data frame and print them to the console
+
+```{r}
+head(airquality, 6)
+```
+
+4. How many observations (i.e. rows) are in this data frame?
+
+```{r}
+nrow(airquality)
+```
+
+5. Extract the last 6 rows of the data frame and print them to the console
+
+```{r}
+tail(airquality, 6)
+```
+
+6. How many missing values are in the "Ozone" column of this data frame?
+
+```{r}
+sum(is.na(airquality$Ozone))
+```
+7. What is the mean of the "Ozone" column in this dataset? Exclude missing values (coded as NA) from this calculation.
+
+```{r}
+mean(airquality$Ozone, na.rm = TRUE)
+```
+
+8. Extract the subset of rows of the data frame where Ozone values are above 31 and Temp values are above 90.
+
+```{r}
+subset(airquality, Ozone > 31 & Temp > 90)
+```
+
+You task is to answer the following questions about this data by writing appropriate code.
+
+1. What are the column names of the data frame?
+
+2. What are the row names of the data frame?
+
+3. Extract the first 6 rows of the data frame and print them to the console
+
+4. How many observations (i.e. rows) are in this data frame?
+
+5. Extract the last 6 rows of the data frame and print them to the console
+
+6. How many missing values are in the "Ozone" column of this data frame?
+
+7. What is the mean of the "Ozone" column in this dataset? Exclude missing values (coded as NA) from this calculation.
+
+8. Extract the subset of rows of the data frame where Ozone values are above 31 and Temp values are above 90.
